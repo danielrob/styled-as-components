@@ -1,4 +1,6 @@
 var path = require('path');
+const webpack = require("webpack");
+
 module.exports = {
   entry: './src/index.js',
   output: {
@@ -25,5 +27,11 @@ module.exports = {
     'react': 'react',
     'styled-components': 'styled-components',
     'react-dom': 'react-dom'
-  }
+  },
+  plugins: [
+    new webpack.optimize.UglifyJsPlugin({
+      include: /\.js$/,
+      minimize: true
+    })
+  ]
 };
