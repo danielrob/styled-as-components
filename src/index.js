@@ -7,6 +7,12 @@ function as(Target) {
   this.Target = Target
 }
 
+const styledAs = Target => {
+  const templateFunction = styled(Target)
+  templateFunction.as = new as(Target)
+  return templateFunction
+}
+
 domElements.forEach(element => {
   as.prototype[element] = function(...args) {
     const StyledElement = styled[element](...args)
@@ -17,15 +23,6 @@ domElements.forEach(element => {
       </StyledElement>
     )
   }
-})
-
-const styledAs = Target => {
-  const templateFunction = styled(Target)
-  templateFunction.as = new as(Target)
-  return templateFunction
-}
-
-domElements.forEach(element => {
   styledAs[element] = styled[element]
 })
 
