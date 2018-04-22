@@ -1,6 +1,6 @@
 ## styled-as-components
 
-A simple and tiny wrapper around styled-components that additionally allows you to do this:
+A simple and [tiny](https://bundlephobia.com/result?p=styled-as-components) wrapper around styled-components that additionally allows you to do this:
 
 ```
 const MyComponent = () => (<>
