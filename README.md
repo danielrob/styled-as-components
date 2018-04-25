@@ -38,4 +38,11 @@ const MyComponent = (props) => (
   </MyComponentWrapper>
 )
 ```
-styled-as-components allows you to skip this step and create the containing element on the fly in a single step with simply the `styled.as.element` syntax.
+styled-as-components allows you to skip this step and create the containing element on the fly in a single step with simply the `styled(MyComponent).as.element` syntax.
+
+#### Considerations
+When you consider your component a styled element container with contents, this pattern can be useful.
+
+This pattern is not always suitable if you want to pass custom props to the styled-element, e.g. `onClick` or `isSpecialCase={a && b && !c}`. This pattern will require these props to be passed in different places or derived from within the styled-component itself. This may make refactoring if you want to revert from this pattern less obvious.
+
+Note refs only work on class components. Since styled-as-components always wraps the provided component with a function component this will not work with refs.
