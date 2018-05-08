@@ -2,7 +2,7 @@
 
 A simple and [tiny](https://bundlephobia.com/result?p=styled-as-components) wrapper around styled-components that additionally allows you to do this:
 
-```
+```javascript
 const MyComponent = () => (<>
   <ChildA />
   <ChildB />
@@ -15,7 +15,7 @@ export default styled(MyComponent).as.div`
 Where '`<></>`' is the shorthand syntax for [React.Fragment](https://reactjs.org/docs/fragments.html).
 
 This will render
-```
+```javascript
   <div.styled>
     <ChildA/>
     <ChildB/>
@@ -24,25 +24,38 @@ This will render
 
 All element types supported by styled-components are supported here.
 
+#### What is the problem being solved?
+Styled-components allows you to create components that _have_ a styled element wrapper. Styled-as-components allows you to create components that _are_ a styled element wrapper. It's a conceptual tweak that can be nice in some cases, and stop you having to write `Wrapper` everywhere. In more detail:
 
-#### Motivation
-To create a container element with styled components you must create a styled component, and pull that in as the outer node of your component. E.g.:
+To create a container element with styled components you create a named styled component, and pull that in as the outer node of your component. E.g.:
 
-```
-import MyComponentWrapper from './MyComponentWrapper'
-
+```javascript
 const MyComponent = (props) => (
   <MyComponentWrapper {...props}>
     <ChildA>
-    <ChildB>
   </MyComponentWrapper>
 )
+
+const MyComponentWrapper = styled.div`
+
+`
+// Ensure here the .eslintrc rule is like "no-use-before-define": ["error", { "variables": false }]
 ```
-styled-as-components allows you to skip this step and create the containing element on the fly in a single step with simply the `styled(MyComponent).as.element` syntax.
+styled-as-components allows you to skip this step and create the containing element on the fly in a single step with simply the `styled(MyComponent).as.element` syntax:
+
+```javascript
+const MyComponent = (props) => (
+  <ChildA>
+)
+
+export default(MyComponent).styled.as.div`
+
+`
+```
+
+It's a small win, but it can be rather nice.
 
 #### Considerations
-When you consider your component a styled element container with contents, this pattern can be useful.
+This pattern stops being suitable if yould have wanted to pass custom props to the styled-element e.g. `isDerivedProp={a && b && !c}` that you feel should be managed from within the component, not the parent. I find this pretty rare when using proper separation of container and display components.
 
-This pattern is not always suitable if you want to pass custom props to the styled-element, e.g. `onClick` or `isSpecialCase={a && b && !c}`. This pattern will require these props to be passed in different places or derived from within the styled-component itself. This may make refactoring if you want to revert from this pattern less obvious.
-
-Note refs only work on class components. Since styled-as-components always wraps the provided component with a function component this will not work with refs.
+innerRef's should work the same, but just be aware the wrapped component is a stateless function component, so ref's won't work. This will all be updated soon anyway with the new 16.3 ref's api.
